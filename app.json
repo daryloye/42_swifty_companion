@@ -1,13 +1,13 @@
 {
   "expo": {
-    "name": "my-app",
-    "slug": "my-app",
+    "name": "42Students",
+    "slug": "42Students",
+    "scheme": "myapp",
     "version": "1.0.0",
     "orientation": "default",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
-    "scheme": "myapp",
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.myapp"
@@ -31,6 +31,15 @@
           "image": "./assets/splash-icon.png"
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "11d82964-9d97-4bd7-a9de-a6f5652cb936"
+      }
+    },
+    "runtimeVersion": "1.0.0",
+    "updates": {
+      "url": "https://u.expo.dev/11d82964-9d97-4bd7-a9de-a6f5652cb936"
+    }
   }
 }

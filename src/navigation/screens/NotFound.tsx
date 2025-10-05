@@ -1,11 +1,11 @@
-import { Text, Button } from '@react-navigation/elements';
+import { Button, Text } from '@react-navigation/elements';
 import { StyleSheet, View } from 'react-native';
 
 export function NotFound() {
   return (
     <View style={styles.container}>
-      <Text>404</Text>
-      <Button screen="HomeTabs">Go to Home</Button>
+      <Text>404 Page Not Found</Text>
+      <Button screen="Home">Back to Home</Button>
     </View>
   );
 }

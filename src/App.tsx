@@ -9,8 +9,6 @@ import { Navigation } from './navigation';
 
 Asset.loadAsync([
   ...NavigationAssets,
-  require('./assets/newspaper.png'),
-  require('./assets/bell.png'),
 ]);
 
 SplashScreen.preventAutoHideAsync();
@@ -18,6 +16,7 @@ SplashScreen.preventAutoHideAsync();
 const prefix = createURL('/');
 
 export function App() {
+  console.log("App rendered");
   const colorScheme = useColorScheme();
 
   const theme = colorScheme === 'dark' ? DarkTheme : DefaultTheme
