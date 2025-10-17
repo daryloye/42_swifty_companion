@@ -1,45 +1,31 @@
 {
   "expo": {
-    "name": "42Students",
-    "slug": "42Students",
-    "scheme": "myapp",
+    "name": "SwiftlyCompanion",
+    "slug": "SwiftlyCompanion",
+    "scheme": "SwiftlyCompanion",
     "version": "1.0.0",
-    "orientation": "default",
+    "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "userInterfaceStyle": "automatic",
+    "userInterfaceStyle": "light",
     "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
     "ios": {
-      "supportsTablet": true,
-      "bundleIdentifier": "com.myapp"
+      "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.myapp"
+      "edgeToEdgeEnabled": true,
+      "predictiveBackGestureEnabled": false
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    },
-    "plugins": [
-      "expo-asset",
-      [
-        "expo-splash-screen",
-        {
-          "backgroundColor": "#ffffff",
-          "image": "./assets/splash-icon.png"
-        }
-      ]
-    ],
-    "extra": {
-      "eas": {
-        "projectId": "11d82964-9d97-4bd7-a9de-a6f5652cb936"
-      }
-    },
-    "runtimeVersion": "1.0.0",
-    "updates": {
-      "url": "https://u.expo.dev/11d82964-9d97-4bd7-a9de-a6f5652cb936"
     }
   }
 }
