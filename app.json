@@ -2,7 +2,7 @@
   "expo": {
     "name": "SwiftlyCompanion",
     "slug": "SwiftlyCompanion",
-    "scheme": "SwiftlyCompanion",
+    "scheme": "swiftlycompanion",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -22,10 +22,20 @@
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "package": "com.daryloye.SwiftlyCompanion"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-web-browser",
+      "expo-secure-store"
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "ec25cd5d-6128-43fd-a1db-913ea9d3501c"
+      }
     }
   }
 }

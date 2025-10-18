@@ -2,8 +2,12 @@ const client_id = process.env.EXPO_PUBLIC_CLIENT_ID;
 const client_secret = process.env.EXPO_PUBLIC_CLIENT_SECRET;
 const base_url = "https://api.intra.42.fr";
 
+
 export async function fetchWithTimeout(url: string, options = {}, timeout = 5000) {
-    const signal = AbortSignal.timeout(timeout);
+    
+    const controller = new AbortController();
+    setTimeout(() => controller.abort(), timeout);
+    const signal =  controller.signal;
 
     try {
         const response = await fetch(url, { ...options, signal });
@@ -25,13 +29,25 @@ export async function fetchWithTimeout(url: string, options = {}, timeout = 5000
     }
 }
 
-export async function authorize() {
-    const response = await fetch(base_url + `/oauth/authorize?client_id=${client_id}&redirect_uri=http://localhost&response_type=code`, {
-        method: 'GET',
+export async function fetchTokenWithCode(code: string, redirectUri: string, state: string) {
+    const res = await fetchWithTimeout(base_url + `/oauth/token`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            grant_type: 'authorization_code',
+            client_id: client_id,
+            client_secret: client_secret,
+            code: code,
+            redirect_uri: redirectUri,
+            state: state
+        })
     });
-    const data = await response.json();
-    console.log(data);
-    return data;
+    if (res === undefined || res.access_token === undefined) {
+        throw new Error("Failed to fetch token");
+    }
+    return res.access_token;
 }
 
 export async function fetchToken() {

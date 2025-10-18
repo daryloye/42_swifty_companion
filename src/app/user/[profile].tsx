@@ -1,33 +1,27 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button, Image, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { Projects } from '../components/Projects';
-import { Skills } from '../components/Skills';
-import * as Api from '../utils/api';
-import * as Token from '../utils/token';
+import { Projects } from '../../components/Projects';
+import { Skills } from '../../components/Skills';
+import * as Api from '../../utils/api';
 
 
-export default function ProfileScreen() {
+export default function Profile() {
+    const [token, setToken] = useState('');
     const [user, setUser] = useState('' as any);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<Error | null>(null);
 
-    const { login } = useLocalSearchParams<{ login: string }>();
-
-    const router = useRouter();
+    const {profile} = useLocalSearchParams<{profile: string}>();
+		
+		const router = useRouter();
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                // const token = await api.fetchToken();
-                // setToken(token);
-
-                const token = await Token.getToken();
-                
-                if (!token) {
-                    throw Error('Not Logged In');
-                }
-                const id = await Api.fetchUserId(token, login);
+                const token = await Api.fetchToken();
+								setToken(token);
+                const id = await Api.fetchUserId(token, profile);
                 const data = await Api.fetchUserDetails(token, id);
                 setUser(data);
             }
@@ -74,10 +68,10 @@ export default function ProfileScreen() {
             <Skills cursus={user.cursus_users[user.cursus_users.length - 1]} />
             <Projects projects={user.projects_users} />
             <Button
-                color="#055c9d"
-                title="Home"
-                onPress={() => router.push("/")}
-            />
+                    color="#055c9d"
+                    title="Home"
+                    onPress={() => router.push("/")}
+                />
         </ScrollView>
     );
 }
