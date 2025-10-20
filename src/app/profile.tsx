@@ -5,7 +5,7 @@ import { AppButton } from '../components/AppButton';
 import { Projects } from '../components/Projects';
 import { Skills } from '../components/Skills';
 import * as Api from '../utils/api';
-import * as Token from '../utils/token';
+import * as Cache from '../utils/cache';
 
 
 export default function ProfileScreen() {
@@ -20,8 +20,7 @@ export default function ProfileScreen() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const token = await Token.getToken();
-                // check if token expired??       
+                const token = await Cache.getToken();
                 if (!token) {
                     throw Error('Not Logged In');
                 }
@@ -56,7 +55,7 @@ export default function ProfileScreen() {
         );
     }
     return (
-        <ScrollView contentContainerStyle={styles.container}>
+        <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps='handled'>
             <Text style={styles.header}>{user.login}'s Profile</Text>
             <Image
                 source={{ uri: user.image.link }}

@@ -36,13 +36,15 @@ sequenceDiagram
     Cache->>Friends:
     Friends->>42-API: Fetch User ID (/v2/users?filter[login]={login})
     42-API->>Friends:
-    Friends->>Cache: addFriendID
+    Friends->>Cache: addFriendId
 
     Note over Friends, Cache: Delete friend
-    Friends->>Cache: deleteFriendID
+    Friends->>Cache: deleteFriendId
 
     Note over Friends, Cache: Show friends
     Friends->>Cache: getToken
+    Cache->>Friends:
+    Friends->>Cache: getFriendId
     Cache->>Friends:
     Friends->>42-API: Fetch User Details (/v2/users/{id})
     42-API->>Friends:

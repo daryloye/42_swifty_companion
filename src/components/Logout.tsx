@@ -1,5 +1,5 @@
 import { AppButton } from '../components/AppButton';
-import * as Token from '../utils/token';
+import * as Token from '../utils/cache';
 
 export function Logout() {
     return (

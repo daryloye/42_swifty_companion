@@ -4,7 +4,7 @@ import * as WebBrowser from "expo-web-browser";
 import { useEffect, useState } from 'react';
 import { AppButton } from '../components/AppButton';
 import * as Api from '../utils/api';
-import * as Token from '../utils/token';
+import * as Cache from '../utils/cache';
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -53,7 +53,7 @@ export function Login() {
 
                 try {
                     const token = await Api.fetchTokenWithCode(code, redirectUri, state);
-                    await Token.setToken(token);
+                    await Cache.setToken(token);
                 } catch (err) {
                     console.error('Error fetching token:', err);
                 }

@@ -1,35 +1,61 @@
 import { useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import { Button, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { AppButton } from '../components/AppButton';
 import { Friends } from '../components/Friends';
+import { alert } from '../utils/alert';
 import * as Api from '../utils/api';
-import * as Token from '../utils/token';
+import * as Cache from '../utils/cache';
 
 
 export default function FriendsScreen() {
     const [input, onChangeInput] = useState('');
+
     const [locations, setLocations] = useState('' as any);
-    const [friends, setFriends] = useState<string[]>([]);
     const [logins, setLogins] = useState('' as any);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<Error | null>(null);
 
     const router = useRouter();
 
+    const handleAdd = async () => {
+        try {
+            const token = await Cache.getToken();
+            if (!token) {
+                throw Error('Not Logged in')
+            }
+            const id = await Api.fetchUserId(token, input);
+            await Cache.addFriendId(input, id);
+            setLoading(true);
+        }
+        catch (err: any) {
+            alert(err?.message || String(err));
+        }
+        finally {
+            onChangeInput('');
+        }
+    }
+
+    const handleRemove = async () => {
+        await Cache.deleteFriendId(input);
+        onChangeInput('');
+        setLoading(true);
+    }
+
+    // refresh
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const token = await Token.getToken();       
+                const token = await Cache.getToken();       
                 if (!token) {
                     throw Error('Not Logged In');
                 }
-                
+                const ids = await Cache.getFriendIds();
                 const locations = []
                 const logins = []
-                for (const friend of friends) {
-                    console.log('searching for', friend);
-                    const id = await Api.fetchUserId(token, friend);
+                for (const id of ids) {
                     const user = await Api.fetchUserDetails(token, id);
+                    console.log('fetching for id:', id);
                     locations.push(user.location);
                     logins.push(user.login);
                 }
@@ -40,12 +66,14 @@ export default function FriendsScreen() {
                 setError(err as Error);
             }
             finally {
+                onChangeInput('');
                 setLoading(false);
             }
         };
 
         fetchData();
-    }, [friends]);
+    }, [loading]);
+
 
     if (loading) {
         return (
@@ -58,49 +86,26 @@ export default function FriendsScreen() {
         return (
             <View style={styles.container}>
                 <Text>Error: {error.message}</Text>
-                <Button
-                    color="#055c9d"
-                    title="Back to Home"
-                    onPress={() => router.push("/")}
-                />
+                <AppButton title="Back to Home" onPress={() => router.push('/')} />
             </View>
         );
     }
     return (
-        <ScrollView contentContainerStyle={styles.container}>
+        <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps='handled'>
+            <Text style={styles.header}>My friends 👬</Text>
             <TextInput
-                placeholder="Enter login"
+                style={styles.input}
+                placeholder="Enter username"
                 value={input}
-                onChangeText={onChangeInput}
+                onChangeText={(text) => onChangeInput(text.trim().toLowerCase())}
             />
-            <View>
-                <Button 
-                    color="#055c9d"
-                    title="Add"
-                    onPress={() => {
-                        var c = input.trim().toLowerCase();
-                        if (!friends.includes(c)) {
-                            setFriends([...friends, c]);
-                        }
-                        onChangeInput('');
-                    }}
-                />
-                <Button
-                    color="#055c9d"
-                    title="Remove"
-                    onPress={() => {
-                        var c = input.trim().toLowerCase();
-                        setFriends(friends.filter(x => x !== c))
-                        onChangeInput('')
-                    }}
-                />
+            <View style={styles.horizontal}>
+                <AppButton title="Add" onPress={() => handleAdd()} />
+                <AppButton title="Remove" onPress={() => handleRemove() } />
+                <AppButton title="Refresh" onPress={() => setLoading(true)} />
             </View>
             <Friends logins={logins} locations={locations}/>
-            <Button
-                color="#055c9d"
-                title="Home"
-                onPress={() => router.push("/")}
-            />
+            <AppButton title="Home" onPress={() => router.push('/')} />
         </ScrollView>
     );
 }
@@ -111,11 +116,6 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: 'bold'
     },
-    image: {
-        width: 100,
-        height: 100,
-        borderRadius: 50
-    },
     container: {
         padding: 50,
         flexGrow: 1,
@@ -123,9 +123,17 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         gap: 10,
     },
-    text: {
-        fontSize: 24,
+    input: {
+        width: 150,
+        height: 40,
+        margin: 12,
+        borderWidth: 1,
+        padding: 10,
+        backgroundColor: "white",
         color: "black",
-        marginBottom: 10,
+    },
+    horizontal: {
+        flexDirection: 'row',
+        gap: 12,
     },
 });
