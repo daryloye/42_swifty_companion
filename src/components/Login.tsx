@@ -2,7 +2,7 @@ import * as AuthSession from "expo-auth-session";
 import * as Crypto from 'expo-crypto';
 import * as WebBrowser from "expo-web-browser";
 import { useEffect, useState } from 'react';
-import { Button } from 'react-native';
+import { AppButton } from '../components/AppButton';
 import * as Api from '../utils/api';
 import * as Token from '../utils/token';
 
@@ -14,7 +14,6 @@ async function generateState() {
         .map(b => b.toString(16).padStart(2, "0"))
         .join("");
 }
-
 
 export function Login() {
     const [state, setState] = useState<string | null>(null);
@@ -32,7 +31,6 @@ export function Login() {
     });
     const client_id = process.env.EXPO_PUBLIC_CLIENT_ID;
 
-    console.log("Redirect url:", redirectUri);
     const [request, response, promptAsync] = AuthSession.useAuthRequest(
         {
             clientId: client_id,
@@ -42,8 +40,9 @@ export function Login() {
         },
         { authorizationEndpoint: "https://api.intra.42.fr/oauth/authorize" }
     );
-
+    
     useEffect(() => {
+        console.log("Redirect url:", redirectUri);
         if (response?.type === "success") {
             const handleAuth = async () => {
                 const { code, state: returnedState } = response.params;
@@ -64,12 +63,9 @@ export function Login() {
         };
     }, [response]);
 
-    return (
-        <Button
-            title="Login"
-            color="#055c9d"
-            disabled={!request}
-            onPress={() => promptAsync()}
-        />
-    );
+    if (request) {
+        return (
+            <AppButton title="Login" onPress={() => promptAsync()} />
+        );
+    }
 }

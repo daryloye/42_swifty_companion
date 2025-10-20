@@ -1,28 +1,24 @@
 import { useRouter } from "expo-router";
-import React, { useState } from 'react';
-import { Alert, Button, ImageBackground, Platform, StyleSheet, Text, TextInput, View } from "react-native";
+import { useState } from 'react';
+import { ImageBackground, StyleSheet, Text, TextInput, View } from "react-native";
+import { AppButton } from '../components/AppButton';
 import { Login } from '../components/Login';
 import { Logout } from '../components/Logout';
+import { alert } from '../utils/alert';
 
 export default function HomeScreen() {
     const router = useRouter();
     const [login, onChangeLogin] = useState('');
     
     const handleSearch = () => {
-        if (login.trim() === '') {
-            if (Platform.OS === 'web') {
-                window.alert('Please enter a username');
-                return;
-            }
-            else {
-                Alert.alert('Error', 'Please enter a username');
-                return;
-            }
+        if (login === '') {
+            alert('Please enter a login');
+        } else {
+            router.push({
+                pathname: "/profile",
+                params: { login: login },
+            });
         }
-        router.push({
-            pathname: "/profile",
-            params: { login: login.toLowerCase() },
-        });
     }
 
     return (
@@ -37,13 +33,10 @@ export default function HomeScreen() {
                     style={styles.input}
                     placeholder="Enter username"
                     value={login}
-                    onChangeText={onChangeLogin}
+                    onChangeText={(text) => onChangeLogin(text.trim().toLowerCase())}
                 />
-                <Button
-                    color="#055c9d"
-                    title="Search User"
-                    onPress={() => handleSearch()}
-                />
+                <AppButton title="Search User" onPress={handleSearch} />
+                <AppButton title="Find Friends" onPress={() => router.push('/friends')} />
                 <Login />
                 <Logout />
             </View>

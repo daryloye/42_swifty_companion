@@ -10,6 +10,7 @@ export default function RootLayout() {
         >
             <Stack.Screen name="index" options={{ headerShown: false }} />
             <Stack.Screen name="profile" options={{ title: "Profile" }} />
+            <Stack.Screen name="friends" options={{ title: "\'Friends\'" }} />
             <Stack.Screen name="+not-found" options={{ title: "404 Page Not Found" }} />
         </Stack>
     );

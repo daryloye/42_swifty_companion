@@ -1,5 +1,6 @@
 import { useRouter } from "expo-router";
-import { Button, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
+import { AppButton } from '../components/AppButton';
 
 export default function PageNotFoundScreen() {
     const router = useRouter();
@@ -7,11 +8,7 @@ export default function PageNotFoundScreen() {
     return (
         <View style={styles.container}>
             <Text style={styles.text}>404 Page Not Found 😭</Text>
-            <Button
-                color="#055c9d"
-                title="Back to Home"
-                onPress={() => router.push("/")}
-            />
+            <AppButton title="Back to Home" onPress={() => router.push('/')} />
         </View>
     );
 }

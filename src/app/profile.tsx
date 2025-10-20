@@ -1,6 +1,7 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import { Button, Image, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { AppButton } from '../components/AppButton';
 import { Projects } from '../components/Projects';
 import { Skills } from '../components/Skills';
 import * as Api from '../utils/api';
@@ -19,11 +20,8 @@ export default function ProfileScreen() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                // const token = await api.fetchToken();
-                // setToken(token);
-
                 const token = await Token.getToken();
-                
+                // check if token expired??       
                 if (!token) {
                     throw Error('Not Logged In');
                 }
@@ -53,11 +51,7 @@ export default function ProfileScreen() {
         return (
             <View style={styles.container}>
                 <Text>Error: {error.message}</Text>
-                <Button
-                    color="#055c9d"
-                    title="Back to Home"
-                    onPress={() => router.push("/")}
-                />
+                <AppButton title="Back to Home" onPress={() => router.push('/')} />
             </View>
         );
     }
@@ -73,11 +67,7 @@ export default function ProfileScreen() {
             <Text>Wallet: A${user.wallet}</Text>
             <Skills cursus={user.cursus_users[user.cursus_users.length - 1]} />
             <Projects projects={user.projects_users} />
-            <Button
-                color="#055c9d"
-                title="Home"
-                onPress={() => router.push("/")}
-            />
+            <AppButton title="Home" onPress={() => router.push('/')} />
         </ScrollView>
     );
 }

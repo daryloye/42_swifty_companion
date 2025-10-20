@@ -1,12 +1,8 @@
-import { Button } from 'react-native';
+import { AppButton } from '../components/AppButton';
 import * as Token from '../utils/token';
 
 export function Logout() {
     return (
-        <Button
-            title="Logout"
-            color="#055c9d"
-            onPress={() => Token.deleteToken()}
-        />
+        <AppButton title="Logout" onPress={() => Token.deleteToken()} />
     );
 }

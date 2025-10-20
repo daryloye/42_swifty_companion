@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
-interface ProjectsProps {
+type ProjectsProps = {
     projects: {
         final_mark: number | null;
         status: string;

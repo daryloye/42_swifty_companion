@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
-interface SkillsProps {
+type SkillsProps = {
     cursus: {
         skills: {
             name: string;
