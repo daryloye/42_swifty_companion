@@ -2,6 +2,7 @@ import { useRouter } from "expo-router";
 import { useState } from 'react';
 import { ImageBackground, StyleSheet, Text, TextInput, View } from "react-native";
 import { AppButton } from '../components/AppButton';
+import { ExpireToken } from '../components/ExpireToken';
 import { Login } from '../components/Login';
 import { Logout } from '../components/Logout';
 import { alert } from '../utils/alert';
@@ -39,6 +40,7 @@ export default function HomeScreen() {
                 <AppButton title="Find Friends" onPress={() => router.push('/friends')} />
                 <Login />
                 <Logout />
+                <ExpireToken />
             </View>
         </ImageBackground>
     );

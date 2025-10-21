@@ -3,8 +3,8 @@ import * as Crypto from 'expo-crypto';
 import * as WebBrowser from "expo-web-browser";
 import { useEffect, useState } from 'react';
 import { AppButton } from '../components/AppButton';
-import * as Api from '../utils/api';
-import * as Cache from '../utils/cache';
+import * as api from '../utils/api';
+import * as cache from '../utils/cache';
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -52,8 +52,8 @@ export function Login() {
                 }
 
                 try {
-                    const token = await Api.fetchTokenWithCode(code, redirectUri, state);
-                    await Cache.setToken(token);
+                    const token = await api.fetchTokenWithCode(code, redirectUri, state);
+                    await cache.setToken(token);
                 } catch (err) {
                     console.error('Error fetching token:', err);
                 }

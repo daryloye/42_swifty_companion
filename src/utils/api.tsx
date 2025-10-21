@@ -1,3 +1,5 @@
+import { Token } from '../utils/cache';
+
 const client_id = process.env.EXPO_PUBLIC_CLIENT_ID;
 const client_secret = process.env.EXPO_PUBLIC_CLIENT_SECRET;
 const base_url = "https://api.intra.42.fr";
@@ -29,7 +31,7 @@ export async function fetchWithTimeout(url: string, options = {}, timeout = 5000
     }
 }
 
-export async function fetchTokenWithCode(code: string, redirectUri: string, state: string) {
+export async function fetchTokenWithCode(code: string, redirectUri: string, state: string): Promise<Token> {
     const res = await fetchWithTimeout(base_url + `/oauth/token`, {
         method: 'POST',
         headers: {
@@ -47,25 +49,38 @@ export async function fetchTokenWithCode(code: string, redirectUri: string, stat
     if (res === undefined || res.access_token === undefined) {
         throw new Error("Failed to fetch token");
     }
-    return res.access_token;
+    console.log('Fetched token:', res.access_token);
+    console.log('Token expires in:', res.expires_in);
+    return {
+        access_token: res.access_token,
+        expiry_time: res.expires_in + Date.now()/1000,
+        refresh_token: res.refresh_token,
+    } as Token;
 }
 
-export async function fetchToken() {
+export async function fetchTokenRefresh(refresh_token: string) {
     const res = await fetchWithTimeout(base_url + `/oauth/token`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            grant_type: 'client_credentials',
+            grant_type: 'refresh_token',
             client_id: client_id,
             client_secret: client_secret,
+            refresh_token: refresh_token,
         })
     });
     if (res === undefined || res.access_token === undefined) {
-        throw new Error("Failed to fetch token");
+        throw new Error("Failed to refresh token");
     }
-    return res.access_token;
+    console.log('Refreshed token:', res.access_token);
+    console.log('Token expires in:', res.expires_in);
+    return {
+        access_token: res.access_token,
+        expiry_time: res.expires_in + Date.now()/1000,
+        refresh_token: res.refresh_token,
+    } as Token;
 }
 
 export async function fetchUserId(token: string, login: string) {

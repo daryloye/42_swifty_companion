@@ -4,8 +4,8 @@ import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { AppButton } from '../components/AppButton';
 import { Projects } from '../components/Projects';
 import { Skills } from '../components/Skills';
-import * as Api from '../utils/api';
-import * as Cache from '../utils/cache';
+import * as api from '../utils/api';
+import * as cache from '../utils/cache';
 
 
 export default function ProfileScreen() {
@@ -20,12 +20,12 @@ export default function ProfileScreen() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const token = await Cache.getToken();
+                const token = await cache.getToken();
                 if (!token) {
                     throw Error('Not Logged In');
                 }
-                const id = await Api.fetchUserId(token, login);
-                const data = await Api.fetchUserDetails(token, id);
+                const id = await api.fetchUserId(token, login);
+                const data = await api.fetchUserDetails(token, id);
                 setUser(data);
             }
             catch (err) {

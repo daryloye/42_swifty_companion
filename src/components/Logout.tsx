@@ -1,8 +1,8 @@
 import { AppButton } from '../components/AppButton';
-import * as Token from '../utils/cache';
+import * as cache from '../utils/cache';
 
 export function Logout() {
     return (
-        <AppButton title="Logout" onPress={() => Token.deleteToken()} />
+        <AppButton title="Logout" onPress={() => cache.deleteToken()} />
     );
 }

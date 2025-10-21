@@ -4,8 +4,8 @@ import { ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { AppButton } from '../components/AppButton';
 import { Friends } from '../components/Friends';
 import { alert } from '../utils/alert';
-import * as Api from '../utils/api';
-import * as Cache from '../utils/cache';
+import * as api from '../utils/api';
+import * as cache from '../utils/cache';
 
 
 export default function FriendsScreen() {
@@ -20,12 +20,12 @@ export default function FriendsScreen() {
 
     const handleAdd = async () => {
         try {
-            const token = await Cache.getToken();
+            const token = await cache.getToken();
             if (!token) {
                 throw Error('Not Logged in')
             }
-            const id = await Api.fetchUserId(token, input);
-            await Cache.addFriendId(input, id);
+            const id = await api.fetchUserId(token, input);
+            await cache.addFriendId(input, id);
             setLoading(true);
         }
         catch (err: any) {
@@ -37,7 +37,7 @@ export default function FriendsScreen() {
     }
 
     const handleRemove = async () => {
-        await Cache.deleteFriendId(input);
+        await cache.deleteFriendId(input);
         onChangeInput('');
         setLoading(true);
     }
@@ -46,15 +46,15 @@ export default function FriendsScreen() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const token = await Cache.getToken();       
+                const token = await cache.getToken();       
                 if (!token) {
                     throw Error('Not Logged In');
                 }
-                const ids = await Cache.getFriendIds();
+                const ids = await cache.getFriendIds();
                 const locations = []
                 const logins = []
                 for (const id of ids) {
-                    const user = await Api.fetchUserDetails(token, id);
+                    const user = await api.fetchUserDetails(token, id);
                     console.log('fetching for id:', id);
                     locations.push(user.location);
                     logins.push(user.login);
