@@ -83,10 +83,11 @@ export async function expireToken() {
 // Friend
 export async function addFriendId(key: string, value: string) {
     console.log('Add friend');
-    
+
+    var friends: Record<string, string> = {};
     const stored = await getItem(friendsKey);
     if (stored) {
-        var friends = JSON.parse(stored);
+        friends = JSON.parse(stored);
     }
     
     friends[key] = value;

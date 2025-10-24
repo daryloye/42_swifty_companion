@@ -24,7 +24,10 @@ export default function FriendsScreen() {
             if (!token) {
                 throw Error('Not Logged in')
             }
+            
             const id = await api.fetchUserId(token, input);
+            if (!id) return;
+    
             await cache.addFriendId(input, id);
             setLoading(true);
         }
@@ -50,7 +53,7 @@ export default function FriendsScreen() {
                 if (!token) {
                     throw Error('Not Logged In');
                 }
-                
+
                 const ids = await cache.getFriendIds();
                 if (ids.length === 0) {
                     setLocations([]);

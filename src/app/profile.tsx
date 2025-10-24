@@ -69,14 +69,9 @@ export default function ProfileScreen() {
             <Text>Email: {user.email}</Text>
             <Text>Wallet: A${user.wallet}</Text>
 
-            {user.cursus_users?.length > 0 && (
-                <Skills cursus={user.cursus_users[user.cursus_users.length - 1]} />
-            )}
+            <Skills cursus={user.cursus_users[user.cursus_users.length - 1]} />
+            <Projects projects={user.projects_users} />
 
-            {user.project_users && 
-                <Projects projects={user.projects_users} />
-            }
-            
             <AppButton title="Home" onPress={() => router.push('/')} />
         </ScrollView>
     );
