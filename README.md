@@ -10,6 +10,14 @@ npx expo start --tunnel -c
 - Web: Go to `localhost:8081`
 
 
+To build apk:
+```
+eas login
+eas build:configure
+eas secret:push --scope project --env-file .env
+eas build -p android --profile preview
+```
+
 ## Architecture Diagram:
 ```mermaid
 

@@ -11,8 +11,8 @@ import * as cache from '../utils/cache';
 export default function FriendsScreen() {
     const [input, onChangeInput] = useState('');
 
-    const [locations, setLocations] = useState('' as any);
-    const [logins, setLogins] = useState('' as any);
+    const [locations, setLocations] = useState<string[]>([]);
+    const [logins, setLogins] = useState<string[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<Error | null>(null);
 
@@ -50,15 +50,26 @@ export default function FriendsScreen() {
                 if (!token) {
                     throw Error('Not Logged In');
                 }
+                
                 const ids = await cache.getFriendIds();
-                const locations = []
-                const logins = []
+                if (ids.length === 0) {
+                    setLocations([]);
+                    setLogins([]);
+                    return;
+                }
+                
+                const locations: string[] = [];
+                const logins: string[] = [];
+                
                 for (const id of ids) {
-                    const user = await api.fetchUserDetails(token, id);
+                    const user = await api.fetchUserDetails(token, id as string);
+                    if (!user) continue;
+
                     console.log('fetching for id:', id);
                     locations.push(user.location);
                     logins.push(user.login);
                 }
+                
                 setLocations(locations);
                 setLogins(logins);
             }

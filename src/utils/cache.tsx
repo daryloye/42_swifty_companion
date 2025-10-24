@@ -43,11 +43,11 @@ export async function setToken(token: Token) {
     await setItem(tokenKey, JSON.stringify(token))
 }
 
-export async function getToken() {
+export async function getToken(): Promise<string> {
     console.log('Get token');
     
     const stored = await getItem(tokenKey);
-    if (!stored) return null;
+    if (!stored) return "";
 
     const { access_token, expiry_time, refresh_token } = JSON.parse(stored) as Token;
 
@@ -70,7 +70,7 @@ export async function deleteToken() {
 export async function expireToken() {
     console.log('Expire token');
     const stored = await getItem(tokenKey);
-    if (!stored) return null;
+    if (!stored) return;
 
     var token = JSON.parse(stored) as Token;
     token.expiry_time = 60;
@@ -93,11 +93,11 @@ export async function addFriendId(key: string, value: string) {
     await setItem(friendsKey, JSON.stringify(friends));
 }
 
-export async function getFriendIds() {
+export async function getFriendIds(): Promise<string[]> {
     console.log('Get friend');
 
     const stored = await getItem(friendsKey);
-    if (!stored) return null;
+    if (!stored) return [];
 
     const friends = JSON.parse(stored);
     return Object.values(friends);

@@ -9,7 +9,7 @@ import * as cache from '../utils/cache';
 
 
 export default function ProfileScreen() {
-    const [user, setUser] = useState('' as any);
+    const [user, setUser] = useState<any | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<Error | null>(null);
 
@@ -25,7 +25,11 @@ export default function ProfileScreen() {
                     throw Error('Not Logged In');
                 }
                 const id = await api.fetchUserId(token, login);
+                if (!id) return;
+                
                 const data = await api.fetchUserDetails(token, id);
+                if (!data) return;
+                
                 setUser(data);
             }
             catch (err) {
@@ -37,7 +41,7 @@ export default function ProfileScreen() {
         };
 
         fetchData();
-    }, []);
+    }, [login]);
 
     if (loading) {
         return (
@@ -64,8 +68,15 @@ export default function ProfileScreen() {
             <Text>Name: {user.usual_full_name}</Text>
             <Text>Email: {user.email}</Text>
             <Text>Wallet: A${user.wallet}</Text>
-            <Skills cursus={user.cursus_users[user.cursus_users.length - 1]} />
-            <Projects projects={user.projects_users} />
+
+            {user.cursus_users?.length > 0 && (
+                <Skills cursus={user.cursus_users[user.cursus_users.length - 1]} />
+            )}
+
+            {user.project_users && 
+                <Projects projects={user.projects_users} />
+            }
+            
             <AppButton title="Home" onPress={() => router.push('/')} />
         </ScrollView>
     );
